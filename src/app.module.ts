@@ -1,19 +1,26 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'myuser',
-      password: '12345678',
-      database: 'products_db',
-      autoLoadModels: true,
-      synchronize: true,
-      sync: { force: true },
+    ConfigModule.forRoot({
+      isGlobal: true, // Позволяет использовать ConfigService во всем приложении
+    }),
+    SequelizeModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        dialect: 'postgres',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_DATABASE'),
+        autoLoadModels: true,
+        synchronize: true,
+      }),
     }),
     ProductsModule,
   ],
