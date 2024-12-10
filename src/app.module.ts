@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { ProductsModule } from './products/products.module';
 
 @Module({
   imports: [
@@ -12,7 +13,9 @@ import { SequelizeModule } from '@nestjs/sequelize';
       database: 'products_db',
       autoLoadModels: true,
       synchronize: true,
+      sync: { force: true },
     }),
+    ProductsModule,
   ],
 })
 export class AppModule {}
