@@ -7,7 +7,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
       dialect: 'postgres',
       host: 'localhost',
       port: 5432,
-      username: 'user',
+      username: 'myuser',
       password: '12345678',
       database: 'products_db',
       autoLoadModels: true,
